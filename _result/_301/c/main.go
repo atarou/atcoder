@@ -24,80 +24,70 @@ func main() {
 
 	ms := map[string]int{}
 	mt := map[string]int{}
+	ms["@"] = 0
+	mt["@"] = 0
 
-	msacnt := 0
-	mtacnt := 0
 	for _, st := range s {
-		if string(st) == "@" {
-			msacnt++
-		} else {
-			ms[string(st)]++
-		}
+		ms[string(st)]++
 
 	}
 	for _, tt := range t {
-		if string(tt) == "@" {
-			mtacnt++
+		mt[string(tt)]++
+	}
+	//mtについてはおっけい
+	for tstring, tcount := range mt {
+		if tstring == "@" {
+			continue
+		}
+		if ms[tstring] == tcount {
+			ms[tstring] = 0
+			mt[tstring] = 0
 		} else {
-			mt[string(tt)]++
+			if tstring != "a" && tstring != "t" && tstring != "c" && tstring != "o" && tstring != "d" && tstring != "e" && tstring != "r" {
+				out("No")
+				return
+			}
+			if ms[tstring] > tcount {
+				//msの方が多いので
+				//tの@を減らす
+				mt["@"] -= (ms[tstring] - tcount)
+				if mt["@"] < 0 {
+					out("No")
+					return
+				}
+			} else {
+				//mtの方が多いので
+				//sの@を減らす
+				ms["@"] -= (tcount - ms[tstring])
+				if ms["@"] < 0 {
+					out("No")
+					return
+				}
+			}
+			ms[tstring] = 0
+			mt[tstring] = 0
 		}
 	}
-	for k, v := range mt {
-
+	cnt := 0
+	for sstring, scount := range ms {
+		if scount == 0 {
+			continue
+		}
+		if sstring == "@" {
+			continue
+		}
+		if sstring != "a" && sstring != "t" && sstring != "c" && sstring != "o" && sstring != "d" && sstring != "e" && sstring != "r" {
+			out("No")
+			return
+		}
+		cnt++
 	}
-
-	// for k, v := range mt {
-	// 	if k == "@" {
-	// 		continue
-	// 	}
-	// 	if ms[k] == v {
-	// 		ms[k] = 0
-	// 	} else if ms[k] > v {
-	// 		if k != "a" && k != "t" && k != "c" && k != "o" && k != "d" && k != "e" && k != "r" {
-	// 			out("No")
-	// 			return
-	// 		}
-	// 		if _, ok := mt["@"]; ok {
-	// 			mt["@"] -= (ms[k] - v)
-	// 			if mt["@"] < 0 {
-	// 				out("No")
-	// 				return
-	// 			}
-	// 			ms[k] = 0
-	// 		} else {
-	// 			out("No")
-	// 			return
-	// 		}
-	// 	} else if ms[k] < v {
-	// 		if k != "a" && k != "t" && k != "c" && k != "o" && k != "d" && k != "e" && k != "r" {
-	// 			out("No")
-	// 			return
-	// 		}
-	// 		if _, ok := ms["@"]; ok {
-	// 			ms["@"] -= (v - ms[k])
-	// 			if ms["@"] < 0 {
-	// 				out("No")
-	// 				return
-	// 			}
-	// 			ms[k] = 0
-	// 		} else {
-	// 			out("No")
-	// 			return
-	// 		}
-	// 	}
-	// }
-	// out(ms)
-	// for k, v := range ms {
-	// 	if k == "@" {
-	// 		continue
-	// 	}
-	// 	if v != 0 {
-	// 		out("1")
-	// 		out("No")
-	// 		return
-	// 	}
-	// }
+	if cnt > mt["@"] {
+		out("No")
+		return
+	}
 	out("Yes")
+
 }
 
 // ==================================================
