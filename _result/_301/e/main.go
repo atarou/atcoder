@@ -15,21 +15,91 @@ import (
 var sc = bufio.NewScanner(os.Stdin)
 var wtr = bufio.NewWriter(os.Stdout)
 
+type xy struct {
+	x, y int
+}
+
 func main() {
 
 	defer flush()
 
 	h, w, t := ni3()
 	aaa := make([][]string, h)
+	dist := make([][]int, h)
+	start := xy{}
+	goal := xy{}
+	opop := make([]xy, 0)
+	mp := i2s(h, w, 1)
+
 	for i := 0; i < h; i++ {
 		aaa[i] = make([]string, w)
+		dist[i] = make([]int, w)
 		aa := ns()
 		for j, a := range aa {
-			aaa[i][j] = string(a)
+			switch string(a) {
+			case "S":
+				start = xy{j, i}
+			case "G":
+				goal = xy{j, i}
+			case "#":
+				mp[i][j] = 0
+			case ".":
+			case "o":
+				opop = append(opop, xy{j, i})
+			}
+
 		}
 	}
-	var dfs func(now int)
+	opop = append([]xy{start}, opop...)
+	opop = append(opop, goal)
+
+	//それぞれの距離
+	opdist := i2s(len(opop), len(opop), -1)
+	dx := []int{1, 0, -1, 0}
+	dy := []int{0, 1, 0, -1}
+	//bfsでopop同士の最小距離を求める
+	for i := 0; i < len(opop); i++ {
+		queue := make([]xy, 0)
+		queue = append(queue, opop[i])
+		dist := i2s(h, w, -1)
+		dist[opop[i].y][opop[i].x] = 0
+		for len(queue) > 0 {
+			now := queue[0]
+			queue = queue[1:]
+
+			for j := 0; j < 4; j++ {
+				newX := now.x + dx[j]
+				newY := now.y + dy[j]
+				if newX < 0 || newX > w-1 || newY < 0 || newY > h-1 || mp[newY][newX] == 0 || dist[newY][newX] != -1 {
+					continue
+				}
+				dist[newY][newX] = dist[now.y][now.x] + 1
+				queue = append(queue, xy{newX, newY})
+			}
+		}
+		for j, op := range opop {
+			d := dist[op.y][op.x]
+			opdist[i][j] = d
+		}
+	}
+
+	//全てのパターンで最小距離を求める
+	// bit dp
+
+	for i := 0; i < (1<<len(opop))-1; i++ {
+	}
 }
+
+// func bfs(s xy) []int {
+// 	queue := make([]xy, 0)
+// 	queue = append(queue, s)
+// 	dist :=
+// 	for len(queue)>0 {
+// 		now := queue[0]
+// 		queue = queue[1:]
+
+// 	}
+// }
 
 // ==================================================
 // init
@@ -246,6 +316,29 @@ func nextPermutation(x sort.Interface) bool {
 		l--
 	}
 	return true
+}
+
+// ==================================================
+// slice
+// ==================================================
+
+func is(l int, def int) []int {
+	sl := make([]int, l)
+	for i := 0; i < l; i++ {
+		sl[i] = def
+	}
+	return sl
+}
+
+func i2s(l, m int, def int) [][]int {
+	sl := make([][]int, l)
+	for i := 0; i < l; i++ {
+		sl[i] = make([]int, m)
+		for j := 0; j < m; j++ {
+			sl[i][j] = def
+		}
+	}
+	return sl
 }
 
 type combFactorial struct {
