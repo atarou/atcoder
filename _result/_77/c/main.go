@@ -19,25 +19,25 @@ func main() {
 
 	defer flush()
 
-	// n := ni()
-	// aa := nis(n)
-	// bb := nis(n)
-	// cc := nis(n)
-	// sorti(aa)
-	// sorti(bb)
-	// sorti(cc)
+	n := ni()
+	aa := nis(n)
+	bb := nis(n)
+	cc := nis(n)
+	sorti(aa)
+	sorti(bb)
+	sorti(cc)
 	// out(aa)
 	// out(bb)
 	// out(cc)
 
-	// sum := 0
-	// for _, v := range bb {
-	// 	sml := lower_bound(aa, v)
-	// 	big := upper_bound(cc, v)
-	// 	sum += sml * (n - big)
-	// }
+	sum := 0
+	for _, v := range bb {
+		sml := lower_bound(aa, v)
+		big := upper_bound(cc, v)
+		sum += sml * (n - big)
+	}
 
-	// out(sum)
+	out(sum)
 
 	// cnt := 0
 	// for _, c := range cc {
@@ -67,11 +67,11 @@ func main() {
 	// }
 	// out(cnt)
 
-	ii := []int{2, 4, 4, 4, 4, 4, 4, 4, 100}
-	j := lower_bound(ii, 4)
-	out("i:", j)
-	k := upper_bound(ii, 4)
-	out("k:", k)
+	// ii := []int{2, 4, 4, 4, 4, 4, 4, 4, 100}
+	// j := lower_bound(ii, 4)
+	// out("i:", j)
+	// k := upper_bound(ii, 4)
+	// out("k:", k)
 
 }
 
