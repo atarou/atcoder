@@ -27,7 +27,7 @@ func main() {
 	ans := int64(-1)
 	for i := int64(0); int64(i) < n; i++ {
 		in := sort.Search(int(m), func(j int) bool {
-			return bb[j] >= aa[i]
+			return bb[j]-aa[i] > d
 		})
 		if int64(in) == m {
 			in--
@@ -444,16 +444,35 @@ func binarySearch(array []int, target int) int {
 // out("k:", k)→3
 
 // n"以上"の"最初の"indexを返す
-func lower_bound(ary []int, n int) int {
-	size := len(ary)
-	if ary[size-1] < n {
-		return size
+func lower_bound(ary []int64, n int64) int64 {
+	size := int64(len(ary))
+	if ary[size-1] <= n {
+		return int64(size)
 	}
 	u := size
-	l := 0
+	l := int64(0)
 	for u > l {
 		s := (u + l) / 2
-		if ary[s] < n {
+		if ary[s] <= n {
+			l = s + 1
+		} else {
+			u = s
+		}
+	}
+	return l
+}
+
+// n"以上"の"最初の"indexを返す
+func lower_bound2(ary []int64, n int64) int64 {
+	size := int64(len(ary))
+	if ary[size-1] >= n {
+		return int64(size)
+	}
+	u := size
+	l := int64(0)
+	for u > l {
+		s := (u + l) / 2
+		if ary[s] >= n {
 			l = s + 1
 		} else {
 			u = s
