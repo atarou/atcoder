@@ -19,11 +19,9 @@ func main() {
 
 	defer flush()
 	n, q := ni2()
-	aa := make([][]int, n)
 	mm := make([]map[int]bool, n)
 	for i := 0; i < n; i++ {
-		aa[i] = make([]int, 0, n)
-		mm[i] = map[int]bool{}
+		mm[i] = make(map[int]bool)
 	}
 	ct := make([]int, n)
 	cnt := n
@@ -54,6 +52,7 @@ func main() {
 					}
 					delete(mm[nv], v)
 				}
+				mm[v] = make(map[int]bool)
 				ct[v] = 0
 				cnt++
 			}
