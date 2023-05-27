@@ -19,71 +19,39 @@ func main() {
 
 	defer flush()
 
-	n, m, h, k := ni4()
+	_, m, h, k := ni4()
 
 	s := ns()
 
-	d := make([][]bool, 2*n)
-	for i := 0; i < 2*n; i++ {
-		d[i] = make([]bool, 2*n)
-	}
-
+	items := make(map[string]bool)
 	for i := 0; i < m; i++ {
 		x, y := ni2()
-		x += n
-		y += n
-		d[y][x] = true
+		items[fmt.Sprintf("%d,%d", x, y)] = true
 	}
 
-	type xy struct {
-		x, y int
+	directions := map[string][2]int{
+		"R": {1, 0},
+		"L": {-1, 0},
+		"U": {0, 1},
+		"D": {0, -1},
 	}
-	now := xy{n, n}
-	for _, st := range s {
-		switch string(st) {
-		case "R":
-			now = xy{now.x + 1, now.y}
-			h--
-			if h < 0 {
-				out("No")
-				return
-			}
-			if h < k && d[now.y][now.x] {
-				h = k
-			}
-		case "L":
-			now = xy{now.x - 1, now.y}
-			h--
-			if h < 0 {
-				out("No")
-				return
-			}
-			if h < k && d[now.y][now.x] {
-				h = k
-			}
-		case "U":
-			now = xy{now.x, now.y + 1}
-			h--
-			if h < 0 {
-				out("No")
-				return
-			}
-			if h < k && d[now.y][now.x] {
-				h = k
-			}
-		case "D":
-			now = xy{now.x, now.y - 1}
-			h--
-			if h < 0 {
-				out("No")
-				return
-			}
-			if h < k && d[now.y][now.x] {
-				h = k
-			}
+
+	pos := [2]int{0, 0}
+	for _, direction := range strings.Split(s, "") {
+		dx, dy := directions[direction][0], directions[direction][1]
+		pos[0] += dx
+		pos[1] += dy
+		h--
+		if h < 0 {
+			fmt.Println("No")
+			return
+		}
+		if h < k && items[fmt.Sprintf("%d,%d", pos[0], pos[1])] {
+			h = k
+			delete(items, fmt.Sprintf("%d,%d", pos[0], pos[1]))
 		}
 	}
-	out("Yes")
+	fmt.Println("Yes")
 }
 
 // ==================================================
