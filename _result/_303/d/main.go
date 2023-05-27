@@ -23,29 +23,37 @@ func main() {
 
 	s := ns()
 
-	dp := make([][]int, len(s))
-	for i := 0; i < len(s); i++ {
-		//0番目がon1番目がoff
+	dp := make([][]int, len(s)+1)
+	for i := range dp {
 		dp[i] = make([]int, 2)
+		if i > 0 {
+			dp[i][0] = math.MaxInt32
+			dp[i][1] = math.MaxInt32
+		}
 	}
+	//0がOff,1がOn
+	//初期状態は0
+
+	dp[0][0] = 0
+
 	min := MinIn2Values(x, y)
 	if string(s[0]) == "A" {
-		dp[0][0] = min + z
-		dp[0][1] = y
+		dp[0][0] = y
+		dp[0][1] = z + min
 	} else {
-		dp[0][0] = min + z
-		dp[0][1] = x
+		dp[0][0] = x
+		dp[0][1] = z + min
 	}
 	for i := 1; i < len(s); i++ {
-		switch string(s[i]) {
-		case "A":
-			dp[i][0] = MinIn2Values(dp[i-1][0]+x, dp[i-1][1]+z+min)
-			dp[i][1] = MinIn2Values(dp[i-1][0]+z+min, dp[i-1][1]+x)
-		case "a":
+		if string(s[i]) == "A" {
 			dp[i][0] = MinIn2Values(dp[i-1][0]+y, dp[i-1][1]+z+min)
+			dp[i][1] = MinIn2Values(dp[i-1][0]+z+min, dp[i-1][1]+x)
+		} else {
+			dp[i][0] = MinIn2Values(dp[i-1][0]+x, dp[i-1][1]+z+min)
 			dp[i][1] = MinIn2Values(dp[i-1][0]+z+min, dp[i-1][1]+y)
 		}
 	}
+
 	out(MinIn2Values(dp[len(s)-1][0], dp[len(s)-1][1]))
 }
 
