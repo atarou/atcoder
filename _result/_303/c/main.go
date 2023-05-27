@@ -23,35 +23,39 @@ func main() {
 
 	s := ns()
 
-	items := make(map[string]bool)
+	type xy struct {
+		x, y int
+	}
+	items := make(map[xy]bool, m)
+
 	for i := 0; i < m; i++ {
 		x, y := ni2()
-		items[fmt.Sprintf("%d,%d", x, y)] = true
+		items[xy{x, y}] = true
 	}
 
-	directions := map[string][2]int{
-		"R": {1, 0},
-		"L": {-1, 0},
+	di := map[string][2]int{
 		"U": {0, 1},
 		"D": {0, -1},
+		"R": {1, 0},
+		"L": {-1, 0},
 	}
 
-	pos := [2]int{0, 0}
-	for _, direction := range strings.Split(s, "") {
-		dx, dy := directions[direction][0], directions[direction][1]
-		pos[0] += dx
-		pos[1] += dy
+	now := xy{0, 0}
+	for _, st := range s {
+		d := di[string(st)]
+		now = xy{now.x + d[0], now.y + d[1]}
 		h--
 		if h < 0 {
-			fmt.Println("No")
+			out("No")
 			return
-		}
-		if h < k && items[fmt.Sprintf("%d,%d", pos[0], pos[1])] {
-			h = k
-			delete(items, fmt.Sprintf("%d,%d", pos[0], pos[1]))
+		} else {
+			if h < k && items[now] {
+				h = k
+				items[now] = false
+			}
 		}
 	}
-	fmt.Println("Yes")
+	out("Yes")
 }
 
 // ==================================================
