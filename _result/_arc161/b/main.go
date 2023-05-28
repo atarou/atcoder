@@ -19,49 +19,28 @@ func main() {
 
 	defer flush()
 
-	//64bit
-
 	t := ni()
 
-	for i := 0; i < t; i++ {
-		n := ni()
-
-		digits := int(math.Log2(float64(n))) + 1
-
-		memo := make([]int, 0)
-		for j := 0; j < digits; j++ {
-			if (n>>j)&1 == 1 {
-				memo = append(memo, j)
-			}
-		}
-		if len(memo) == 3 {
-			out(n)
-		} else if len(memo) > 3 {
-			ans := pow(2, memo[len(memo)-1]) + pow(2, memo[len(memo)-2]) + pow(2, memo[len(memo)-3])
-			out(ans)
-		} else if len(memo) == 2 {
-			if memo[0] == 0 || memo[0] == 1 {
-				d := memo[1]
-				if d <= 2 {
-					out(-1)
-				} else {
-					ans := pow(2, memo[1]-1) + pow(2, memo[1]-2) + pow(2, memo[1]-3)
-					out(ans)
-				}
-			} else {
-				ans := pow(2, memo[len(memo)-1]) + pow(2, memo[0]-1) + pow(2, memo[0]-2)
-				out(ans)
-			}
-		} else if len(memo) == 1 {
-			if memo[0] <= 2 {
-				out(-1)
-			} else {
-				ans := pow(2, memo[0]-1) + pow(2, memo[0]-2) + pow(2, memo[0]-3)
-				out(ans)
+	dd := make([]int, 0)
+	for i := 0; i < 60; i++ {
+		for j := i + 1; j < 60; j++ {
+			for k := j + 1; k < 60; k++ {
+				d := pow(2, i) + pow(2, j) + pow(2, k)
+				dd = append(dd, d)
 			}
 		}
 	}
+	sorti(dd)
 
+	for i := 0; i < t; i++ {
+		n := ni()
+		if n < 7 {
+			out(-1)
+			continue
+		}
+		a := upper_bound(dd, n)
+		out(dd[a-1])
+	}
 }
 
 // ==================================================
@@ -211,8 +190,8 @@ func abs(a int) int {
 	return -a
 }
 
-func pow(x, y int) int64 {
-	return int64(math.Pow(float64(x), float64(y)))
+func pow(x, y int) int {
+	return int(math.Pow(float64(x), float64(y)))
 }
 
 func sorti(sl []int) {
