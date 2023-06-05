@@ -30,23 +30,28 @@ func main() {
 	type uv struct {
 		u, v int
 	}
-	ngroots := make(map[int][]int)
+	ngroots := make(map[uv]bool)
 	for i := 0; i < k; i++ {
 		x, y := ni2()
 		x--
 		y--
 		xroot := uf.root(x)
 		yroot := uf.root(y)
-		ngroots[xroot] = append(ngroots[xroot], yroot)
+		ngroots[uv{xroot, yroot}] = true
+		ngroots[uv{yroot, xroot}] = true
 	}
 	q := ni()
 	for i := 0; i < q; i++ {
-		ufCopy := copyUnionFind(uf)
 		p, q := ni2()
 		p--
 		q--
-		ufCopy.unite(p, q)
-
+		proot := uf.root(p)
+		qroot := uf.root(q)
+		if _, ok := ngroots[uv{proot, qroot}]; ok {
+			out("No")
+		} else {
+			out("Yes")
+		}
 	}
 }
 
