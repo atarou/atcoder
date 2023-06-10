@@ -41,24 +41,42 @@ func main() {
 			sum = append(sum, sum[len(sum)-1]+s)
 			// wake = a
 		} else {
+			time = append(time, a)
+			sum = append(sum, sum[len(sum)-1])
 			sleep = a
 		}
 	}
-	out(time)
-	out(sum)
+	// out("time:", time)
+	// out("sum:", sum)
 
 	q := ni()
 
 	for i := 0; i < q; i++ {
 		l, r := ni2()
 
-		lu := upper_bound(time, l)
-		ru := upper_bound(time, r)
+		lu := lower_bound(time, l)
+		ru := lower_bound(time, r)
 
-		// out(lu)
-		// out(ru)
+		// out("lu:", lu)
+		// out("ru:", ru)
 
-		out(sum[ru] - sum[lu])
+		// out("(sum[lu] - (time[lu] - l)):", (sum[lu] - (time[lu] - l)))
+		// out("(sum[ru] - (time[ru] - r)):", (sum[ru] - (time[ru] - r)))
+
+		ls := 0
+		rs := 0
+		if ru%2 != 0 {
+			rs = sum[ru]
+		} else {
+			rs = sum[ru] - (time[ru] - r)
+		}
+
+		if lu%2 != 0 {
+			ls = sum[lu]
+		} else {
+			ls = sum[lu] - (time[lu] - l)
+		}
+		out(rs - ls)
 	}
 }
 
