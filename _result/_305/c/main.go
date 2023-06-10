@@ -22,29 +22,39 @@ func main() {
 	h, w := ni2()
 
 	sss := make([][]bool, h)
-	c := 0
+	// c := 0
 	min := 100000000
 	max := 0
 	for i := 0; i < h; i++ {
 		sss[i] = make([]bool, w)
 		ss := ns()
 
-		cnt := 0
 		for j, s := range ss {
 			if string(s) == "#" {
 				sss[i][j] = true
-				cnt++
 				min = MinIn2Values(min, j)
 				max = MaxIn2Values(max, j)
 			}
 		}
-		c = MaxIn2Values(c, cnt)
 	}
 
 	for i := 0; i < h; i++ {
-		cnt := 0
-		for _, v := range sss[i] {
-			cnt
+		start := false
+		for j := 0; j < w; j++ {
+			if sss[i][j] {
+				if !start && j > min {
+					// out("1")
+					out(i+1, j)
+					return
+				}
+				start = true
+			} else {
+				if start && j <= max {
+					// out(2)
+					out(i+1, j+1)
+					return
+				}
+			}
 		}
 	}
 }
